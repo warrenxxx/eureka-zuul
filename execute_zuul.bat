@@ -1,0 +1,1 @@
+cd zuul && mvnw clean spring-boot:run

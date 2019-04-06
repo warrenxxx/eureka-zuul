@@ -1,0 +1,72 @@
+version: '3'
+
+services:
+  eureka:
+    image: viberegistry.azurecr.io/ems.eureka_server:718
+    hostname: eureka-server
+    ports:
+      - "8761:8761"
+
+  zuul:
+    image:  viberegistry.azurecr.io/ems.zuul:718
+    hostname: zuul
+    ports:
+      - "8760:8760"
+    links:
+      - eureka
+
+  geodata:
+    image: viberegistry.azurecr.io/ems.geodata_v2:719
+    hostname: geodata
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Release
+    ports:
+      - "8600:80"
+    links:
+      - eureka
+  identity:
+    image: viberegistry.azurecr.io/ems.identity_v2:721
+    hostname: identity
+    environment:  
+      - ASPNETCORE_ENVIRONMENT=Release
+    ports:
+      - "8601:80"
+    links:
+      - eureka
+ 
+  voter:
+    image: viberegistry.azurecr.io/ems.voter_v2:725
+    hostname: voter
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Release
+    ports:
+      - "8602:80"
+    links:
+      - eureka
+  systemconfiguration:
+    image: viberegistry.azurecr.io/ems.systemconfiguration_v2:726
+    hostname: system_configuration
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Release
+    ports:
+      - "8603:80"
+    links:
+      - eureka
+  election:
+    image: viberegistry.azurecr.io/ems.election_v2:729
+    hostname: election
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Release
+    ports:
+      - "8604:80"
+    links:
+      - eureka
+  security:
+    image: viberegistry.azurecr.io/ems.security_v2:730
+    hostname: security
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Release
+    ports:
+      - "8605:80"
+    links:
+      - eureka

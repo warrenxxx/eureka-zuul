@@ -1,0 +1,101 @@
+server:
+  port: 8760
+
+spring:
+  application:
+    name: zuul
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+ribbon:
+  ReadTimeout: 100000
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+zuul:
+  sensitive-headers: Cookie,Set-Cookie
+  routes:
+    election:
+      path: /api/**
+      serviceId: election
+    geodata:
+      path: /api/**
+      serviceId: geodata
+    identity:
+      path: /api/**
+      serviceId: identity
+    integration_services:
+      path: /api/**
+      serviceId: integration_services
+    security:
+      path: /api/**
+      serviceId: security
+    system_configuration:
+      path: /api/**
+      serviceId: system_configuration
+    voter:
+      path: /api/**
+      serviceId: voter
+
+
+---
+spring:
+  profiles: production
+  application:
+    name: zuul
+
+server:
+  port: 8760
+
+eureka:
+  instance:
+    hostname: zuul
+    prefer-ip-address: false
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka/
+
+
+ribbon:
+  ReadTimeout: 100000
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+zuul:
+  routes:
+    election:
+      path: /api/**
+      serviceId: election
+    geodata:
+      path: /api/**
+      serviceId: geodata
+    identity:
+      path: /api/**
+      serviceId: identity
+    integration_services:
+      path: /api/**
+      serviceId: integration_services
+    security:
+      path: /api/**
+      serviceId: security
+    system_configuration:
+      path: /api/**
+      serviceId: system_configuration
+    voter:
+      path: /api/**
+      serviceId: voter
+  sensitive-headers: Cookie,Set-Cookie
+
